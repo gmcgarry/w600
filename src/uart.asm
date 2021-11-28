@@ -114,9 +114,6 @@ recvchar:
 	ldr	r0, [r2, #RX_WIN]
 
 sendchar:
-	mov	r3, #0x3
-	str	r3, [r2, #INT_MASK]
-
 	mov	r1, #0x3F
 1:
 	ldr	r3, [r2, #FIFO_STATUS]
@@ -124,9 +121,6 @@ sendchar:
 	bne	1b
 
 	str	r0, [r2, #TX_WIN]
-
-	mov	r3, #0
-	str	r3, [r2, #INT_MASK]
 
 	b	loop
 
@@ -138,5 +132,3 @@ uart_base:
 	; baud register (115200 : 21, 9600 : 260)
 baud_register:
 	.word	(APBCLK / (16 * BAUD) - 1) | (((APBCLK % (BAUD * 16)) * 16 / (BAUD * 16)) << 16)
-
-	.pool
