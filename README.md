@@ -12,13 +12,19 @@ and the W600 ROM expects the FLASH to start with a complex structure.
 
 Nothing as simple as the STM32 flash.
 
+Additionally, the SDK is build on FreeRTOS, much like the
+ESP chips.  Way too much boilerplate code for a microcontroller.
+
+So the aim of this project is to get the W600 to behave more like
+an STM32.
+
 # Pre-build Firmware
 
 If you can find .fls files, they are recognised by the W600 ROM
 and can be written to the flash.  The only .fls file that worked for
 me is the micropython firmware.  So I've [pre-built some more](fls/).
 
-The .fls files can be upload and written to flash over UART0
+The .fls files can be uploaded and written to flash over UART0
 using the following command:
 
 	python3 tools/w600tool.py --upload-baudrate 115200 -u firmware.lfs
@@ -60,3 +66,18 @@ A collection of [pre-built images are available](img/).
 # Tools
 
 The python scripts are modified versions from the W600 SDK.
+
+# Source code
+
+## blink.asm
+
+Simple thumb assembly code to blink an LED which doesn't require
+KB of library code.  On the Wemos W600-pico, the blue LED is on PA0.
+
+## uart.asm
+
+Echo the characters from the CH341 USB serial controller.  By default
+the UART is configured for 115200,N,8,1.
+
+So much simpler that than the interrupt-driven, FIFO-based example in
+the SDK.
